@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import ScoreKeeper from "./ScoreKeeper";
+import Pallette from "./Pallette";
+import seedColors from './seedColors';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <ScoreKeeper />
+      <div>
+        <Pallette {...seedColors[4]}/>
       </div>
     );
   }

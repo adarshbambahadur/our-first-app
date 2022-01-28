@@ -1,0 +1,16 @@
+.App {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: "Rubik", sans-serif;
+}
+
+.link {
+  color: #555;
+}
+
+.active-link {
+  color: #222;
+  border: none;
+}
