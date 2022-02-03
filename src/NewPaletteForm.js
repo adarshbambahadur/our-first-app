@@ -75,6 +75,7 @@ class NewPaletteForm extends Component {
     this.updateCurrentColor = this.updateCurrentColor.bind(this);
     this.addNewColor = this.addNewColor.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   
   handleDrawerOpen = () => {
@@ -107,13 +108,20 @@ class NewPaletteForm extends Component {
     this.setState({newName: evt.target.value});
   }
 
+  handleSubmit() {
+    let newName = "New Test Palette";
+    const newPalette = {paletteName: newName, id: newName.toLowerCase().replace(/ /g, "-"), colors: this.state.colors}
+    this.props.savePalette(newPalette);
+    this.props.history.push('/');
+  }
+
   render() { 
   const {open, currentColor} = this.state;
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} color='default'>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -127,6 +135,7 @@ class NewPaletteForm extends Component {
           <Typography variant="h6" noWrap component="div">
             Persistent drawer
           </Typography>
+          <Button variant='contained' color="primary" onClick={this.handleSubmit}>Save Palette</Button>
         </Toolbar>
       </AppBar>
       <Drawer
