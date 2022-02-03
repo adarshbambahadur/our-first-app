@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { Component } from 'react';
+
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -61,20 +62,36 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-const styles = {
+const styles = theme => {
   
 }
 
-function NewPaletteForm() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
+class NewPaletteForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {open: false, currentColor: "#572a92", colors: ["purple", "#e15764"]};
+    this.updateCurrentColor = this.updateCurrentColor.bind(this);
+    this.addNewColor = this.addNewColor.bind(this);
+  }
+  
+  handleDrawerOpen = () => {
+    this.setState({open: true});
   };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
+  handleDrawerClose = () => {
+    this.setState({open: false});
   };
+
+  updateCurrentColor(newColor) {
+    this.setState({currentColor: newColor.hex})
+  }
+
+  addNewColor() {
+    this.setState({colors: [...this.state.colors, this.state.currentColor]});
+  }
+
+  render() { 
+  const {open, currentColor} = this.state;
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -84,7 +101,7 @@ function NewPaletteForm() {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={this.handleDrawerOpen}
             edge="start"
             sx={{ mr: 2, ...(open && { display: 'none' }) }}
           >
@@ -109,7 +126,7 @@ function NewPaletteForm() {
         open={open}
       >
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={this.handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton>
         </DrawerHeader>
@@ -119,14 +136,20 @@ function NewPaletteForm() {
           <Button variant="contained" color="secondary">Clear Palette</Button>
           <Button variant="contained" color="primary">Random Color</Button>
         </div>
-        <ChromePicker color='purple' onChangeComplete={newColor => console.log(newColor)}/>
-        <Button variant='contained' color="primary">Add Color</Button>
+        <ChromePicker color={currentColor} onChangeComplete={this.updateCurrentColor}/>
+        <Button variant='contained' color="primary" onClick={this.addNewColor} style={{backgroundColor: currentColor}}>Add Color</Button>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
+        <ul>
+          {this.state.colors.map(color => (
+            <li style={{backgroundColor: color}}>{color}</li>
+          ))}
+        </ul>
       </Main>
     </Box>
   );
 }
+}
 
-export default withStyles(styles)(NewPaletteForm);
+export default withStyles(styles, {withTheme: true})(NewPaletteForm);
